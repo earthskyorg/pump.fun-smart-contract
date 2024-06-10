@@ -1,0 +1,23 @@
+[toolchain]
+
+[features]
+seeds = true
+skip-lint = false
+
+[programs.devnet]
+pump = "7wUQXRQtBzTmyp9kcrmok9FKcc4RSYXxPYN9FGDLnqxb"
+
+[registry]
+url = "https://devnet.helius-rpc.com/?api-key=39d83ffa-585c-4f90-8636-2f6795db4cb3"
+
+[provider]
+cluster = "Devnet"
+wallet = "./id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+
+[test]
+startup_wait = 10000
+shutdown_wait = 2000
+upgradeable = false
