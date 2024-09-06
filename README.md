@@ -1,4 +1,4 @@
-# Pump.fun-Smart-Contract
+# Pump Fun Smart Contract
 This is the Rust/Anchor smart contract for Pump.fun - Add virtual LP, remove LP, create Raydium Pool.
 
 ### Here
