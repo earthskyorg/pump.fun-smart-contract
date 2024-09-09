@@ -18,4 +18,5 @@ default = []
 [dependencies]
 anchor-lang = { version="0.29.0", features = ["init-if-needed"] }
 anchor-spl = "0.29.0"
-raydium-contract-instructions = { git = "https://github.com/raydium-io/raydium-contract-instructions.git" }
+solana-program = "1.14.17"
+spl-token = "4.0.1"

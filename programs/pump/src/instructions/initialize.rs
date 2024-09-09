@@ -11,14 +11,6 @@ pub fn initialize(
         return err!(CustomError::InvalidFee);
     }
 
-    let _ = transfer_sol_to_pool(
-        ctx.accounts.admin.to_account_info(),
-        ctx.accounts.global_account.to_account_info(),
-        10000000,
-        ctx.accounts.system_program.to_account_info()
-
-    );
-
     dex_config.set_inner(CurveConfiguration::new(fees));
 
     Ok(())
@@ -34,14 +26,6 @@ pub struct InitializeCurveConfiguration<'info> {
         bump,
     )]
     pub dex_configuration_account: Box<Account<'info, CurveConfiguration>>,
-
-    /// CHECK
-    #[account(
-        mut,
-        seeds = [b"global"],
-        bump,
-    )]
-    pub global_account: AccountInfo<'info>,
 
     #[account(mut)]
     pub admin: Signer<'info>,

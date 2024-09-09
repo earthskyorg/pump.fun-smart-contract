@@ -20,7 +20,7 @@ pub fn swap(ctx: Context<Swap>, amount: u64, style: u64) -> Result<()> {
 
     let token_two_accounts = (
         &mut *ctx.accounts.mint_token_one.clone(),
-        &mut ctx.accounts.global_account.to_account_info().clone(),
+        &mut pool.to_account_info().clone(),
         &mut ctx.accounts.user.clone()
     );
 
@@ -30,7 +30,6 @@ pub fn swap(ctx: Context<Swap>, amount: u64, style: u64) -> Result<()> {
         token_two_accounts,
         amount,
         style,
-        ctx.bumps.global_account,
         &ctx.accounts.user,
         &ctx.accounts.token_program,
         &ctx.accounts.system_program,
@@ -55,21 +54,13 @@ pub struct Swap<'info> {
     )]
     pub pool: Box<Account<'info, LiquidityPool>>,
 
-    /// CHECK
-    #[account(
-        mut,
-        seeds = [b"global"],
-        bump,
-    )]
-    pub global_account: AccountInfo<'info>,
-
     #[account(mut)]
     pub mint_token_one: Box<Account<'info, Mint>>,
 
     #[account(
         mut,
         associated_token::mint = mint_token_one,
-        associated_token::authority = global_account
+        associated_token::authority = pool
     )]
     pub pool_token_account_one: Box<Account<'info, TokenAccount>>,
 

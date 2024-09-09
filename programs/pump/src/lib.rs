@@ -1,14 +1,14 @@
 use anchor_lang::prelude::*;
 
-pub mod consts;
 pub mod errors;
+pub mod utils;
 pub mod instructions;
 pub mod state;
-pub mod utils;
+pub mod consts;
 
 use crate::instructions::*;
 
-declare_id!("7wUQXRQtBzTmyp9kcrmok9FKcc4RSYXxPYN9FGDLnqxb");
+declare_id!("7RiUM3T5TE6VrqKE9ekPfn6SZNQ7Z7FEmQCyoXytdEVD");
 
 #[program]
 pub mod pump {
@@ -30,24 +30,11 @@ pub mod pump {
         instructions::add_liquidity(ctx, amount_one, amount_two)
     }
 
-    pub fn remove_liquidity(
-        ctx: Context<RemoveLiquidity>,
-        nonce: u8,
-        init_pc_amount: u64,
-    ) -> Result<()> {
-        instructions::remove_liquidity(ctx, nonce, init_pc_amount)
+    pub fn remove_liquidity(ctx: Context<RemoveLiquidity>, shares: u64) -> Result<()> {
+        instructions::remove_liquidity(ctx, shares)
     }
 
     pub fn swap(ctx: Context<Swap>, amount: u64, style: u64) -> Result<()> {
         instructions::swap(ctx, amount, style)
-    }
-
-    pub fn create_raydium_pool(
-        ctx: Context<CreateRaydiumPool>,
-        nonce: u8,
-        init_pc_amount: u64,
-        init_coin_amount: u64,
-    ) -> Result<()> {
-        instructions::create_raydium_pool(ctx, nonce, init_pc_amount, init_coin_amount)
     }
 }

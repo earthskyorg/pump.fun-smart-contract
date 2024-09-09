@@ -9,8 +9,3 @@ export type {
 } from "./removeLiquidity"
 export { swap } from "./swap"
 export type { SwapArgs, SwapAccounts } from "./swap"
-export { createRaydiumPool } from "./createRaydiumPool"
-export type {
-  CreateRaydiumPoolArgs,
-  CreateRaydiumPoolAccounts,
-} from "./createRaydiumPool"

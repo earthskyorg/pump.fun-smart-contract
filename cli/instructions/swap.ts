@@ -11,8 +11,6 @@ export interface SwapArgs {
 export interface SwapAccounts {
   dexConfigurationAccount: PublicKey
   pool: PublicKey
-  /** CHECK */
-  globalAccount: PublicKey
   mintTokenOne: PublicKey
   poolTokenAccountOne: PublicKey
   userTokenAccountOne: PublicKey
@@ -37,7 +35,6 @@ export function swap(
       isWritable: true,
     },
     { pubkey: accounts.pool, isSigner: false, isWritable: true },
-    { pubkey: accounts.globalAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.mintTokenOne, isSigner: false, isWritable: true },
     { pubkey: accounts.poolTokenAccountOne, isSigner: false, isWritable: true },
     { pubkey: accounts.userTokenAccountOne, isSigner: false, isWritable: true },

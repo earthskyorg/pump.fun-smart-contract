@@ -3,12 +3,11 @@ import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
 import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
 import { PROGRAM_ID } from "../programId"
 
-export interface AddLiquidityArgs {
-  amountOne: BN
-  amountTwo: BN
+export interface RemoveLiquidityArgs {
+  shares: BN
 }
 
-export interface AddLiquidityAccounts {
+export interface RemoveLiquidityAccounts {
   pool: PublicKey
   liquidityProviderAccount: PublicKey
   mintTokenOne: PublicKey
@@ -21,14 +20,11 @@ export interface AddLiquidityAccounts {
   associatedTokenProgram: PublicKey
 }
 
-export const layout = borsh.struct([
-  borsh.u64("amountOne"),
-  borsh.u64("amountTwo"),
-])
+export const layout = borsh.struct([borsh.u64("shares")])
 
-export function addLiquidity(
-  args: AddLiquidityArgs,
-  accounts: AddLiquidityAccounts,
+export function removeLiquidity(
+  args: RemoveLiquidityArgs,
+  accounts: RemoveLiquidityAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
@@ -51,12 +47,11 @@ export function addLiquidity(
       isWritable: false,
     },
   ]
-  const identifier = Buffer.from([181, 157, 89, 67, 143, 182, 52, 72])
+  const identifier = Buffer.from([80, 85, 209, 72, 24, 206, 177, 108])
   const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
-      amountOne: args.amountOne,
-      amountTwo: args.amountTwo,
+      shares: args.shares,
     },
     buffer
   )

@@ -150,7 +150,6 @@ pub trait LiquidityPoolAccount<'info> {
         ),
         amount: u64,
         style: u64,
-        bump: u8,
         authority: &Signer<'info>,
         token_program: &Program<'info, Token>,
         system_program: &Program<'info, System>,
@@ -162,8 +161,6 @@ pub trait LiquidityPoolAccount<'info> {
         to: &Account<'info, TokenAccount>,
         amount: u64,
         token_program: &Program<'info, Token>,
-        authority: &AccountInfo<'info>,
-        bump: u8
     ) -> Result<()>;
 
     fn transfer_token_to_pool(
@@ -189,7 +186,6 @@ pub trait LiquidityPoolAccount<'info> {
         to: &AccountInfo<'info>,
         amount: u64,
         system_program: &Program<'info, System>,
-        bump: u8
     ) -> Result<()>;
 }
 
@@ -367,12 +363,12 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
 
         self.update_reserves(new_reserves_one, new_reserves_two)?;
 
-        // self.transfer_token_from_pool(
-        //     token_one_accounts.1,
-        //     token_one_accounts.2,
-        //     amount_out_one,
-        //     token_program,
-        // )?;
+        self.transfer_token_from_pool(
+            token_one_accounts.1,
+            token_one_accounts.2,
+            amount_out_one,
+            token_program,
+        )?;
 
         Ok(())
     }
@@ -392,7 +388,6 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         ),
         amount: u64,
         style: u64,
-        bump: u8,
         authority: &Signer<'info>,
         token_program: &Program<'info, Token>,
         system_program: &Program<'info, System>,
@@ -462,7 +457,6 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
                 token_two_accounts.1,
                 amount_out,
                 system_program,
-                bump
             )?;
         } else {
             let denominator_sum = self
@@ -496,8 +490,6 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
                 token_one_accounts.2,
                 amount_out,
                 token_program,
-                token_two_accounts.1,
-                bump
             )?;
 
             self.transfer_sol_to_pool(
@@ -516,8 +508,6 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         to: &Account<'info, TokenAccount>,
         amount: u64,
         token_program: &Program<'info, Token>,
-        authority: &AccountInfo<'info>,
-        bump: u8
     ) -> Result<()> {
         token::transfer(
             CpiContext::new_with_signer(
@@ -525,11 +515,12 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
                 token::Transfer {
                     from: from.to_account_info(),
                     to: to.to_account_info(),
-                    authority: authority.to_account_info(),
+                    authority: self.to_account_info(),
                 },
                 &[&[
-                    "global".as_bytes(),
-                    &[bump],
+                    LiquidityPool::POOL_SEED_PREFIX.as_bytes(),
+                    self.token_one.key().as_ref(),
+                    &[self.bump],
                 ]],
             ),
             amount,
@@ -594,7 +585,6 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         to: &AccountInfo<'info>,
         amount: u64,
         system_program: &Program<'info, System>,
-        bump: u8
     ) -> Result<()> {
         system_program::transfer(
             CpiContext::new_with_signer(
@@ -604,8 +594,9 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
                     to: to.clone(),
                 },
                 &[&[
-                    "global".as_bytes(),
-                    &[bump],
+                    LiquidityPool::POOL_SEED_PREFIX.as_bytes(),
+                    self.token_one.key().as_ref(),
+                    &[self.bump],
                 ]],
             ),
             amount,
@@ -660,23 +651,4 @@ impl<'info> LiquidityPoolAccount<'info> for Account<'info, LiquidityPool> {
         )?;
         Ok(())
     }
-}
-
-pub fn transfer_sol_to_pool<'info>(
-    from: AccountInfo<'info>,
-    to: AccountInfo<'info>,
-    amount: u64,
-    system_program: AccountInfo<'info>,
-) -> Result<()> {
-    system_program::transfer(
-        CpiContext::new(
-            system_program.to_account_info(),
-            system_program::Transfer {
-                from: from.to_account_info(),
-                to: to.to_account_info(),
-            },
-        ),
-        amount,
-    )?;
-    Ok(())
 }

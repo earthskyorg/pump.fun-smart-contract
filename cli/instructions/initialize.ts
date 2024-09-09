@@ -9,8 +9,6 @@ export interface InitializeArgs {
 
 export interface InitializeAccounts {
   dexConfigurationAccount: PublicKey
-  /** CHECK */
-  globalAccount: PublicKey
   admin: PublicKey
   rent: PublicKey
   systemProgram: PublicKey
@@ -29,7 +27,6 @@ export function initialize(
       isSigner: false,
       isWritable: true,
     },
-    { pubkey: accounts.globalAccount, isSigner: false, isWritable: true },
     { pubkey: accounts.admin, isSigner: true, isWritable: true },
     { pubkey: accounts.rent, isSigner: false, isWritable: false },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
