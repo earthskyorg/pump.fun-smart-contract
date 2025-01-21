@@ -1,3 +1,4 @@
+import 'mocha';
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Pump } from "../target/types/pump"

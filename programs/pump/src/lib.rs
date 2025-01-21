@@ -9,6 +9,9 @@ pub mod consts;
 use crate::instructions::*;
 
 declare_id!("7RiUM3T5TE6VrqKE9ekPfn6SZNQ7Z7FEmQCyoXytdEVD");
+use anchor_spl::token::{Token, TokenAccount, Mint};
+use anchor_lang::system_program::System;
+use crate::state::{CurveConfiguration, LiquidityPool, LiquidityProvider};
 
 #[program]
 pub mod pump {
