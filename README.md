@@ -1,5 +1,5 @@
-# Solana Pumpfun Smart Contract for pump.fun
-This is the Rust/Anchor smart contract for Pump.fun - Add virtual LP, remove LP, create Raydium Pool.
+# Solana Pumpfun Smart Contract for pumpfun fork
+This is the Pumpfun Smart contract for Pump.fun - Add virtual LP, remove LP, create Raydium Pool.
 
 # Overview
 This smart contract is intended for the Pump.fun project.
